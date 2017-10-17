@@ -26,11 +26,11 @@ env:
     - ANDROID_EMU_TARGET=android-21
     - ANDROID_EMU_ABI=armeabi-v7a
   matrix:
-    - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
+    # - START_EMU=0 RECURSIVE=--recursive TEST=unit COVERALLS=1
     - TEST=functional
-    - TEST=functional/commands
-    - TEST=functional/commands/find
-    - TEST=functional/commands/keyboard
+    # - TEST=functional/commands
+    # - TEST=functional/commands/find
+    # - TEST=functional/commands/keyboard
 before_script:
   # node stuff
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
@@ -48,7 +48,7 @@ before_script:
   # for chromedriver
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test --yes
   - sudo apt-get update
-  - sudo apt-get install libstdc++6-4.7-dev  
+  - sudo apt-get install libstdc++6-4.7-dev
 
   # make sure emulator started
   - $(npm bin)/android-emu-travis-post
