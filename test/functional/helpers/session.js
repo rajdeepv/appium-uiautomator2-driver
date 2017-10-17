@@ -3,9 +3,9 @@ import { DEFAULT_HOST, DEFAULT_PORT } from '../../..';
 import logger from '../../../lib/logger';
 import wd from 'wd';
 
-async function initDriver (caps) {
+async function initDriver (caps, adbPort = 5037) {
   if (process.env.TRAVIS) {
-    let adb = new ADB();
+    let adb = await ADB.createADB({adbPort});
     try {
       // on Travis, sometimes we get the keyboard dying and the screen stuck
       await adb.forceStop('com.android.inputmethod.latin');
