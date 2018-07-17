@@ -149,14 +149,21 @@ describe('keyboard', function () {
       }
       await driver.activateIMEEngine(selectedEngine);
     });
-    after(async () => {
+    after(async function () {
       await driver.quit();
     });
 
-
     describe('editing a text field', function () {
+      let els;
+      beforeEach(async function () {
+        els = await retryInterval(5, 1000, async function () {
+          const els = await driver.elementsByClassName(EDITTEXT_CLASS);
+          els.should.have.length.at.least(1);
+          return els;
+        });
+      });
       for (let test of tests) {
-        describe(test.label, () => {
+        describe(test.label, function () {
           it('should work with setValue', async function () {
             await runTextEditTest(driver, test.text);
           });
@@ -170,7 +177,6 @@ describe('keyboard', function () {
         // there is currently no way to directly assert anything about the contents
         // of a password field, since there is no way to access the contents
         const password = 'super-duper password';
-        let els = await driver.elementsByClassName(EDITTEXT_CLASS);
         let passwordTextField = els[1];
         let passwordOutput = await driver.elementById('io.appium.android.apis:id/edit1Text');
         await passwordTextField.sendKeys(password);
@@ -189,7 +195,6 @@ describe('keyboard', function () {
             return this.skip();
           }
         }
-        let els = await driver.elementsByClassName(EDITTEXT_CLASS);
         let el = els[3];
         await el.setImmediateValue('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
@@ -199,16 +204,16 @@ describe('keyboard', function () {
       });
     });
 
-    describe('sending a key event', () => {
-      before(async () => {
+    describe('sending a key event', function () {
+      before(async function () {
         await driver.startActivity({appPackage: PACKAGE, appActivity: KEYEVENT_ACTIVITY});
         await B.delay(500);
       });
 
-      it('should be able to send combination keyevents', async () => {
+      it('should be able to send combination keyevents', async function () {
         await runCombinationKeyEventTest(driver);
       });
-      it('should be able to send keyevents', async () => {
+      it('should be able to send keyevents', async function () {
         await runKeyEventTest(driver);
       });
     });
@@ -244,7 +249,7 @@ describe('keyboard', function () {
     describe('editing a text field', function () {
       for (let testSet of [tests, unicodeTests, languageTests]) {
         for (let test of testSet) {
-          describe(test.label, () => {
+          describe(test.label, function () {
             it('should work with setValue', async function () {
               await runTextEditTest(driver, test.text);
             });
@@ -256,15 +261,15 @@ describe('keyboard', function () {
       }
     });
 
-    describe('sending a key event', () => {
-      before(async () => {
+    describe('sending a key event', function () {
+      before(async function () {
         await driver.startActivity({appPackage: PACKAGE, appActivity: KEYEVENT_ACTIVITY});
       });
 
-      it('should be able to send combination keyevents', async () => {
+      it('should be able to send combination keyevents', async function () {
         await runCombinationKeyEventTest(driver);
       });
-      it('should be able to send keyevents', async () => {
+      it('should be able to send keyevents', async function () {
         await runKeyEventTest(driver);
       });
     });
